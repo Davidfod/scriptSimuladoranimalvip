@@ -9,9 +9,16 @@ local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
+local VirtualUser = game:GetService("VirtualUser")
 
 local player = Players.LocalPlayer
 local active = false
+
+-- ANTI AFK (Adicionado sem apagar nada)
+player.Idled:Connect(function()
+    VirtualUser:CaptureController()
+    VirtualUser:ClickButton2(Vector2.new())
+end)
 
 local function getRoot()
     local char = player.Character or player.CharacterAdded:Wait()
@@ -101,6 +108,10 @@ local function CreateUI()
                         local root = getRoot()
                         
                         if root and root.Parent:FindFirstChild("Humanoid") and root.Parent.Humanoid.Health > 0 then
+                            
+                            -- ANTI SIT (Adicionado sem apagar nada)
+                            if root.Parent.Humanoid.Sit then root.Parent.Humanoid.Jump = true end
+                            
                             root.Velocity = Vector3.new(0,0,0)
                             root.CFrame = obj.CFrame
                             task.wait(0.01)
